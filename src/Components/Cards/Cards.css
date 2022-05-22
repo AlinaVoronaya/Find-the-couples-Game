@@ -21,3 +21,9 @@
     transform: scale(0.97);
     transition: transform .2s;
 }
+
+.cards__hidden {
+    width: 116px;
+    height: 116px;
+    background-color: #fff;
+}

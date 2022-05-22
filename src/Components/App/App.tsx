@@ -11,17 +11,12 @@ import icon8 from '../../images/Icon8.jpg';
 import {MovesMade} from "../MovesMade/MovesMade";
 import {Cards} from "../Cards/Cards";
 import {MovesLeft} from "../MovesLeft/MovesLeft";
+import {CardItem} from '../../types';
 
-interface Item {
-    icon: string
-    id: number
-    isOpen: boolean
-}
-
-const countOpenCards = (cards: Item[]) => {
+const countOpenCards = (cards: CardItem[]) => {
     let counter = 0;
     for (let i = 0; i < cards.length; i++) {
-        if (cards[i].isOpen) {
+        if (cards[i].isOpen && !cards[i].isHidden) {
             counter++
         }
     }
@@ -31,11 +26,37 @@ const countOpenCards = (cards: Item[]) => {
 export const App = () => {
 
     //
-    const onCardClick = (item: Item) => {
-        if (!item.isOpen) {
-            item.isOpen = true
-            if (countOpenCards(cards) % 2 == 0) {
-                setMovesMade(movesMade + 1)
+    const onCardClick = (item: CardItem) => {
+        if (item.isOpen) {
+            return
+        }
+        item.isOpen = true
+        if (countOpenCards(cards) == 2) {
+            setMovesMade(movesMade + 1)
+            {
+                // Пройти по всем карточкам, найти открытые, сравнить и либо скрыть, либо закрыть
+                let openCard1: CardItem | null = null;
+                for (let i = 0; i < cards.length; i++) {
+                    if (cards[i].isHidden || !cards[i].isOpen) {
+                        continue
+                    }
+
+                    if (openCard1 == null) {
+                        openCard1 = cards[i];
+                        continue
+                    }
+
+
+                    if (cards[i].icon == openCard1.icon) {
+                        openCard1.isHidden = true;
+                        cards[i].isHidden = true;
+                        console.log("Карточки совпали")
+                    } else {
+                        openCard1.isOpen = false;
+                        cards[i].isOpen = false;
+                        console.log("Карточки не совпали")
+                    }
+                }
             }
         }
         setCards([...cards]);
@@ -46,22 +67,22 @@ export const App = () => {
     )
 
     const [cards, setCards] = React.useState([
-        {icon: icon1, id: 1, isOpen: false},
-        {icon: icon2, id: 2, isOpen: false},
-        {icon: icon3, id: 3, isOpen: false},
-        {icon: icon4, id: 4, isOpen: false},
-        {icon: icon5, id: 5, isOpen: false},
-        {icon: icon6, id: 6, isOpen: false},
-        {icon: icon7, id: 7, isOpen: false},
-        {icon: icon8, id: 8, isOpen: false},
-        {icon: icon1, id: 9, isOpen: false},
-        {icon: icon2, id: 10, isOpen: false},
-        {icon: icon3, id: 11, isOpen: false},
-        {icon: icon4, id: 12, isOpen: false},
-        {icon: icon5, id: 13, isOpen: false},
-        {icon: icon6, id: 14, isOpen: false},
-        {icon: icon7, id: 15, isOpen: false},
-        {icon: icon8, id: 16, isOpen: false}
+        {icon: icon1, id: 1, isOpen: false, isHidden: false},
+        {icon: icon2, id: 2, isOpen: false, isHidden: false},
+        {icon: icon3, id: 3, isOpen: false, isHidden: false},
+        {icon: icon4, id: 4, isOpen: false, isHidden: false},
+        {icon: icon5, id: 5, isOpen: false, isHidden: false},
+        {icon: icon6, id: 6, isOpen: false, isHidden: false},
+        {icon: icon7, id: 7, isOpen: false, isHidden: false},
+        {icon: icon8, id: 8, isOpen: false, isHidden: false},
+        {icon: icon1, id: 9, isOpen: false, isHidden: false},
+        {icon: icon2, id: 10, isOpen: false, isHidden: false},
+        {icon: icon3, id: 11, isOpen: false, isHidden: false},
+        {icon: icon4, id: 12, isOpen: false, isHidden: false},
+        {icon: icon5, id: 13, isOpen: false, isHidden: false},
+        {icon: icon6, id: 14, isOpen: false, isHidden: false},
+        {icon: icon7, id: 15, isOpen: false, isHidden: false},
+        {icon: icon8, id: 16, isOpen: false, isHidden: false}
     ])
 
 
@@ -79,7 +100,7 @@ export const App = () => {
                 <section className="field-of-game">
                     <div className="container flex">
                         <MovesMade
-                        counter={movesMade}
+                            counter={movesMade}
                         />
                         <Cards
                             items={cards}

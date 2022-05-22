@@ -1,16 +1,11 @@
 import React, {FC} from 'react';
 import './Cards.css';
 import cover from '../../images/Cover.jpg';
-
-interface Item {
-    icon: string
-    id: number
-    isOpen: boolean
-}
+import {CardItem} from '../../types';
 
 interface Props {
-    items: Item[]
-    onClick: (item: Item) => void;
+    items: CardItem[]
+    onClick: (item: CardItem) => void;
 }
 
 export const Cards: FC<Props> = ({items, onClick}) => {
@@ -24,8 +19,9 @@ export const Cards: FC<Props> = ({items, onClick}) => {
                         onClick={() => onClick(item)}
                         key={item.id}
                     >
-                        {item.isOpen && <img className="cards__face" src={item.icon} alt="Card Face"/>}
-                        {!item.isOpen && <img className="cards__cover" src={cover} alt="Cover"/>}
+                        {item.isHidden && <div className="cards__hidden"></div>}
+                        {!item.isHidden && item.isOpen && <img className="cards__face" src={item.icon} alt="Card Face"/>}
+                        {!item.isHidden && !item.isOpen && <img className="cards__cover" src={cover} alt="Cover"/>}
 
                     </div>
                 )
