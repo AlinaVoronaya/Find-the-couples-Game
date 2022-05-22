@@ -1,0 +1,23 @@
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--grid-gap);
+    min-width: 500px;
+}
+
+.cards__item {
+    position: relative;
+}
+
+.cards__cover {
+    position: absolute;
+}
+
+.cards__face {
+    /*position: absolute;*/
+}
+
+.cards__cover:active {
+    transform: scale(0.97);
+    transition: transform .2s;
+}

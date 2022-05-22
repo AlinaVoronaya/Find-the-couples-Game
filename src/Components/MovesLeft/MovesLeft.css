@@ -1,0 +1,8 @@
+.moves-left {
+    max-width: 170px;
+    text-align: center;
+}
+
+.moves-left__counter {
+    color: var(--color-accent);
+}
