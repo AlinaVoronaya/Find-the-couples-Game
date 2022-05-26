@@ -13,6 +13,8 @@ import {Cards} from "../Cards/Cards";
 import {MovesLeft} from "../MovesLeft/MovesLeft";
 import {CardItem} from '../../types';
 
+// Проходим циклом по всем карточкам и проверяем - если карточка открыта и не скрыта, увеличиваем счетчик (используем этот счетчик,
+// чтобы отслеживать, что было открыто 2 карты и сравнивать их)
 const countOpenCards = (cards: CardItem[]) => {
     let counter = 0;
     for (let i = 0; i < cards.length; i++) {
@@ -23,13 +25,23 @@ const countOpenCards = (cards: CardItem[]) => {
     return counter
 }
 
+// Функция перемешивающая массив карточек
+const shuffleCards = (cards: CardItem[]): CardItem[] => {
+    for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+    return cards
+}
+
 export const App = () => {
 
-    //
+    // Описываем логику работы различных вариантов при нажатии на карточки ( если карточка не была открыта, то выходим из функции)
     const onCardClick = (item: CardItem) => {
         if (item.isOpen) {
             return
         }
+        // Если карточка открыта и количество открытых карточек = 2, то увеличиваем счетчик сделаных ходов.
         item.isOpen = true
         if (countOpenCards(cards) == 2) {
             setMovesMade(movesMade + 1)
@@ -46,18 +58,17 @@ export const App = () => {
                         continue
                     }
 
-
                     if (cards[i].icon == openCard1.icon) {
                         openCard1.isHidden = true;
                         cards[i].isHidden = true;
-                        console.log("Карточки совпали")
                     } else {
                         openCard1.isOpen = false;
                         cards[i].isOpen = false;
-                        console.log("Карточки не совпали")
                     }
                 }
             }
+            // TODO: Здесь если все карточки скрыты то вывести модалку, что мы победили.
+            // TODO: Если остались не скрытые карточки остались, а ходов не осталось то вывести модалку о проигрыше
         }
         setCards([...cards]);
     }
@@ -66,7 +77,7 @@ export const App = () => {
         0
     )
 
-    const [cards, setCards] = React.useState([
+    const [cards, setCards] = React.useState(shuffleCards([
         {icon: icon1, id: 1, isOpen: false, isHidden: false},
         {icon: icon2, id: 2, isOpen: false, isHidden: false},
         {icon: icon3, id: 3, isOpen: false, isHidden: false},
@@ -83,7 +94,7 @@ export const App = () => {
         {icon: icon6, id: 14, isOpen: false, isHidden: false},
         {icon: icon7, id: 15, isOpen: false, isHidden: false},
         {icon: icon8, id: 16, isOpen: false, isHidden: false}
-    ])
+    ]))
 
 
     return (
