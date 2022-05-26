@@ -12,13 +12,14 @@ import {MovesMade} from "../MovesMade/MovesMade";
 import {Cards} from "../Cards/Cards";
 import {MovesLeft} from "../MovesLeft/MovesLeft";
 import {CardItem} from '../../types';
+import {WinModal} from "../WinModal/WinModal";
 
 // Проходим циклом по всем карточкам и проверяем - если карточка открыта и не скрыта, увеличиваем счетчик (используем этот счетчик,
 // чтобы отслеживать, что было открыто 2 карты и сравнивать их)
 const countOpenCards = (cards: CardItem[]) => {
     let counter = 0;
     for (let i = 0; i < cards.length; i++) {
-        if (cards[i].isOpen && !cards[i].isHidden) {
+        if (cards[i].state == "open") {
             counter++
         }
     }
@@ -27,46 +28,61 @@ const countOpenCards = (cards: CardItem[]) => {
 
 // Функция перемешивающая массив карточек
 const shuffleCards = (cards: CardItem[]): CardItem[] => {
-    for (let i = cards.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [cards[i], cards[j]] = [cards[j], cards[i]];
-    }
+    // for (let i = cards.length - 1; i > 0; i--) {
+    //     const j = Math.floor(Math.random() * (i + 1));
+    //     [cards[i], cards[j]] = [cards[j], cards[i]];
+    // }
     return cards
+}
+
+const winGame = (cards: CardItem[]): boolean => {
+    return cards.every(function (item: CardItem) {
+        return item.state == "hidden";
+    })
 }
 
 export const App = () => {
 
     // Описываем логику работы различных вариантов при нажатии на карточки ( если карточка не была открыта, то выходим из функции)
     const onCardClick = (item: CardItem) => {
-        if (item.isOpen) {
+        if (item.state == "open") {
             return
         }
         // Если карточка открыта и количество открытых карточек = 2, то увеличиваем счетчик сделаных ходов.
-        item.isOpen = true
+        item.state = "open"
         if (countOpenCards(cards) == 2) {
             setMovesMade(movesMade + 1)
             {
                 // Пройти по всем карточкам, найти открытые, сравнить и либо скрыть, либо закрыть
                 let openCard1: CardItem | null = null;
                 for (let i = 0; i < cards.length; i++) {
-                    if (cards[i].isHidden || !cards[i].isOpen) {
+                    // Если карточка закрыта или скрыта, идем дальше
+                    if (cards[i].state !== "open") {
                         continue
                     }
 
+                    // Если мы еще не нашли первую открытую карточку, то мы ее запоминаем в
                     if (openCard1 == null) {
                         openCard1 = cards[i];
                         continue
                     }
 
+                    // Если иконки двух открытых карточек совпадают, скрываем обе эти карточки
                     if (cards[i].icon == openCard1.icon) {
-                        openCard1.isHidden = true;
-                        cards[i].isHidden = true;
+                        console.log(openCard1, cards[i]);
+                        openCard1.state = "hidden";
+                        cards[i].state = "hidden";
                     } else {
-                        openCard1.isOpen = false;
-                        cards[i].isOpen = false;
+                        openCard1.state = "closed";
+                        cards[i].state = "closed";
                     }
                 }
             }
+            console.log(cards);
+            if (winGame(cards)) {
+                setGameState("user win")
+            }
+
             // TODO: Здесь если все карточки скрыты то вывести модалку, что мы победили.
             // TODO: Если остались не скрытые карточки остались, а ходов не осталось то вывести модалку о проигрыше
         }
@@ -77,23 +93,25 @@ export const App = () => {
         0
     )
 
+    const [gameState, setGameState] = React.useState("running")
+
     const [cards, setCards] = React.useState(shuffleCards([
-        {icon: icon1, id: 1, isOpen: false, isHidden: false},
-        {icon: icon2, id: 2, isOpen: false, isHidden: false},
-        {icon: icon3, id: 3, isOpen: false, isHidden: false},
-        {icon: icon4, id: 4, isOpen: false, isHidden: false},
-        {icon: icon5, id: 5, isOpen: false, isHidden: false},
-        {icon: icon6, id: 6, isOpen: false, isHidden: false},
-        {icon: icon7, id: 7, isOpen: false, isHidden: false},
-        {icon: icon8, id: 8, isOpen: false, isHidden: false},
-        {icon: icon1, id: 9, isOpen: false, isHidden: false},
-        {icon: icon2, id: 10, isOpen: false, isHidden: false},
-        {icon: icon3, id: 11, isOpen: false, isHidden: false},
-        {icon: icon4, id: 12, isOpen: false, isHidden: false},
-        {icon: icon5, id: 13, isOpen: false, isHidden: false},
-        {icon: icon6, id: 14, isOpen: false, isHidden: false},
-        {icon: icon7, id: 15, isOpen: false, isHidden: false},
-        {icon: icon8, id: 16, isOpen: false, isHidden: false}
+        {icon: icon1, id: 1, state: "closed"},
+        {icon: icon2, id: 2, state: "closed"},
+        {icon: icon3, id: 3, state: "closed"},
+        {icon: icon4, id: 4, state: "closed"},
+        {icon: icon5, id: 5, state: "closed"},
+        {icon: icon6, id: 6, state: "closed"},
+        {icon: icon7, id: 7, state: "closed"},
+        {icon: icon8, id: 8, state: "closed"},
+        {icon: icon1, id: 9, state: "closed"},
+        {icon: icon2, id: 10, state: "closed"},
+        {icon: icon3, id: 11, state: "closed"},
+        {icon: icon4, id: 12, state: "closed"},
+        {icon: icon5, id: 13, state: "closed"},
+        {icon: icon6, id: 14, state: "closed"},
+        {icon: icon7, id: 15, state: "closed"},
+        {icon: icon8, id: 16, state: "closed"}
     ]))
 
 
@@ -120,6 +138,7 @@ export const App = () => {
                         <MovesLeft
                             counter={movesMade}
                         />
+                        {gameState == "user win" && <WinModal/>}
                     </div>
                 </section>
             </main>

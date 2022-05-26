@@ -19,10 +19,9 @@ export const Cards: FC<Props> = ({items, onClick}) => {
                         onClick={() => onClick(item)}
                         key={item.id}
                     >
-                        {item.isHidden && <div className="cards__hidden"></div>}
-                        {!item.isHidden && item.isOpen && <img className="cards__face" src={item.icon} alt="Card Face"/>}
-                        {!item.isHidden && !item.isOpen && <img className="cards__cover" src={cover} alt="Cover"/>}
-
+                        {item.state == "hidden" && <div className="cards__hidden"></div>}
+                        {item.state == "open" && <img className="cards__face" src={item.icon} alt="Card Face"/>}
+                        {item.state == "closed" && <img className="cards__cover" src={cover} alt="Cover"/>}
                     </div>
                 )
             })}

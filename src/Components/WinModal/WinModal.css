@@ -1,0 +1,22 @@
+.win-modal {
+    width: 685px;
+    height: 371px;
+    background-color: #FF5533;
+    border-radius: 12px;
+}
+
+.win-modal__text {
+    font-weight: 700;
+    line-height: 50px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+.win-modal__btn {
+    width: 340px;
+    height: 64px;
+    background: #0083FC;
+    border-radius: 12px;
+    color: #FFFFFF;
+}
