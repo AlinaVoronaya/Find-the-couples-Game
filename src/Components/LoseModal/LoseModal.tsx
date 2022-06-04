@@ -1,12 +1,16 @@
-import React from 'react';
-import './LoseModal.css.css';
+import React, {FC} from 'react';
+import './LoseModal.css';
 
-export const WinModal = () => {
+interface Props {
+    onClick: () => void;
+}
+
+export const LoseModal: FC<Props> = ({onClick}) => {
 
     return (
-        <section className="win-modal">
-            <p className="win-madal__text">Увы, вы проиграли у вас кончились ходы</p>
-            <button className="win-modal__btn">Сыграть еще</button>
+        <section className="lose-modal">
+            <p className="lose-modal__text">Увы, вы проиграли  {'\n'} у вас кончились ходы</p>
+            <button className="lose-modal__btn" onClick={onClick}>Сыграть еще</button>
         </section>
     )
 }

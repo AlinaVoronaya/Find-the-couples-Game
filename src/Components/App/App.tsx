@@ -13,6 +13,7 @@ import {Cards} from "../Cards/Cards";
 import {MovesLeft} from "../MovesLeft/MovesLeft";
 import {CardItem} from '../../types';
 import {WinModal} from "../WinModal/WinModal";
+import {LoseModal} from "../LoseModal/LoseModal";
 
 // Проходим циклом по всем карточкам и проверяем - если карточка открыта и не скрыта, увеличиваем счетчик (используем этот счетчик,
 // чтобы отслеживать, что было открыто 2 карты и сравнивать их)
@@ -40,6 +41,28 @@ const winGame = (cards: CardItem[]): boolean => {
         return item.state == "hidden";
     })
 }
+
+const getInitialCardsState = () => {
+    return [
+        {icon: icon1, id: 1, state: "closed"},
+        {icon: icon2, id: 2, state: "closed"},
+        {icon: icon3, id: 3, state: "closed"},
+        {icon: icon4, id: 4, state: "closed"},
+        {icon: icon5, id: 5, state: "closed"},
+        {icon: icon6, id: 6, state: "closed"},
+        {icon: icon7, id: 7, state: "closed"},
+        {icon: icon8, id: 8, state: "closed"},
+        {icon: icon1, id: 9, state: "closed"},
+        {icon: icon2, id: 10, state: "closed"},
+        {icon: icon3, id: 11, state: "closed"},
+        {icon: icon4, id: 12, state: "closed"},
+        {icon: icon5, id: 13, state: "closed"},
+        {icon: icon6, id: 14, state: "closed"},
+        {icon: icon7, id: 15, state: "closed"},
+        {icon: icon8, id: 16, state: "closed"}
+    ]
+}
+
 
 export const App = () => {
 
@@ -81,12 +104,17 @@ export const App = () => {
             console.log(cards);
             if (winGame(cards)) {
                 setGameState("user win")
+            } else if (movesMade >= 39) {
+                setGameState("user lose")
             }
-
-            // TODO: Здесь если все карточки скрыты то вывести модалку, что мы победили.
-            // TODO: Если остались не скрытые карточки остались, а ходов не осталось то вывести модалку о проигрыше
         }
         setCards([...cards]);
+    }
+
+    const onButtonClick = () => {
+        setGameState("running")
+        setCards( getInitialCardsState() )
+        setMovesMade(0)
     }
 
     const [movesMade, setMovesMade] = React.useState(
@@ -95,24 +123,9 @@ export const App = () => {
 
     const [gameState, setGameState] = React.useState("running")
 
-    const [cards, setCards] = React.useState(shuffleCards([
-        {icon: icon1, id: 1, state: "closed"},
-        {icon: icon2, id: 2, state: "closed"},
-        {icon: icon3, id: 3, state: "closed"},
-        {icon: icon4, id: 4, state: "closed"},
-        {icon: icon5, id: 5, state: "closed"},
-        {icon: icon6, id: 6, state: "closed"},
-        {icon: icon7, id: 7, state: "closed"},
-        {icon: icon8, id: 8, state: "closed"},
-        {icon: icon1, id: 9, state: "closed"},
-        {icon: icon2, id: 10, state: "closed"},
-        {icon: icon3, id: 11, state: "closed"},
-        {icon: icon4, id: 12, state: "closed"},
-        {icon: icon5, id: 13, state: "closed"},
-        {icon: icon6, id: 14, state: "closed"},
-        {icon: icon7, id: 15, state: "closed"},
-        {icon: icon8, id: 16, state: "closed"}
-    ]))
+    const [cards, setCards] = React.useState(shuffleCards(
+        getInitialCardsState()
+    ))
 
 
     return (
@@ -138,7 +151,8 @@ export const App = () => {
                         <MovesLeft
                             counter={movesMade}
                         />
-                        {gameState == "user win" && <WinModal/>}
+                        {gameState == "user win" && <WinModal onClick={onButtonClick} movesMade={movesMade}/>}
+                        {gameState == "user lose" && <LoseModal onClick={onButtonClick} />}
                     </div>
                 </section>
             </main>
