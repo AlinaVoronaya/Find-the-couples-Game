@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import './Cards.css';
 import cover from '../../images/Cover.jpg';
 import {CardItem} from '../../types';
+import icon1 from "../../images/Icon1.jpg";
 
 interface Props {
     items: CardItem[]
@@ -14,15 +15,12 @@ export const Cards: FC<Props> = ({items, onClick}) => {
         <section className="cards">
             {items.map((item) => {
                 return (
-                    <div
-                        className="cards__item"
-                        onClick={() => onClick(item)}
-                        key={item.id}
-                    >
-                        {item.state == "hidden" && <div className="cards__hidden"></div>}
-                        {item.state == "open" && <img className="cards__face" src={item.icon} alt="Card Face"/>}
-                        {item.state == "closed" && <img className="cards__cover" src={cover} alt="Cover"/>}
-                    </div>
+                    <section className="flip-card" onClick={() => onClick(item)} key={item.id}>
+                        <div className={`card card--${item.state}`}>
+                            <img className="card__face" src={icon1} alt="icon"/>
+                            <img className="card__cover" src={cover} alt="cover"/>
+                        </div>
+                    </section>
                 )
             })}
         </section>
