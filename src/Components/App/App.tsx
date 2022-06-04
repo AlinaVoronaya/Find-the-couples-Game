@@ -65,7 +65,7 @@ const getInitialCardsState = () => {
 
 
 export const App = () => {
-
+    
     // Описываем логику работы различных вариантов при нажатии на карточки ( если карточка не была открыта, то выходим из функции)
     const onCardClick = (item: CardItem) => {
         if (item.state !== "closed") {
@@ -93,11 +93,21 @@ export const App = () => {
                     // Если иконки двух открытых карточек совпадают, скрываем обе эти карточки
                     if (cards[i].icon == openCard1.icon) {
                         console.log(openCard1, cards[i]);
-                        openCard1.state = "hidden";
-                        cards[i].state = "hidden";
+                        openCard1.state = "open";
+                        cards[i].state = "open";
+                        setTimeout(() => {
+                            openCard1.state = "hidden";
+                            cards[i].state = "hidden";
+                            setCards([...cards]);
+                        }, 1000)
                     } else {
-                        openCard1.state = "closed";
-                        cards[i].state = "closed";
+                        openCard1.state = "open";
+                        cards[i].state = "open";
+                        setTimeout(() => {
+                            openCard1.state = "closed";
+                            cards[i].state = "closed";
+                            setCards([...cards]);
+                        }, 1000)
                     }
                 }
             }
