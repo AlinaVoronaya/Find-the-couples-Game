@@ -128,7 +128,7 @@ export const App = () => {
 
     const onButtonClick = () => {
         setGameState("running")
-        setCards(getInitialCardsState())
+        setCards(shuffleCards(getInitialCardsState()))
         setMovesMade(0)
     }
 
