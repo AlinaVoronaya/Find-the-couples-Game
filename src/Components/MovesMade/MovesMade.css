@@ -1,8 +1,0 @@
-.moves-made {
-    max-width: 170px;
-    text-align: center;
-}
-
-.moves-made__counter {
-    color: var(--color-accent);
-}
