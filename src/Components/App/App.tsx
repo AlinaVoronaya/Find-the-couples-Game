@@ -29,10 +29,10 @@ const countOpenCards = (cards: CardItem[]) => {
 
 // Функция перемешивающая массив карточек
 const shuffleCards = (cards: CardItem[]): CardItem[] => {
-    // for (let i = cards.length - 1; i > 0; i--) {
-    //     const j = Math.floor(Math.random() * (i + 1));
-    //     [cards[i], cards[j]] = [cards[j], cards[i]];
-    // }
+    for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
     return cards
 }
 
@@ -65,7 +65,7 @@ const getInitialCardsState = () => {
 
 
 export const App = () => {
-    
+
     // Описываем логику работы различных вариантов при нажатии на карточки ( если карточка не была открыта, то выходим из функции)
     const onCardClick = (item: CardItem) => {
         if (item.state !== "closed") {
@@ -92,29 +92,34 @@ export const App = () => {
 
                     // Если иконки двух открытых карточек совпадают, скрываем обе эти карточки
                     if (cards[i].icon == openCard1.icon) {
-                        console.log(openCard1, cards[i]);
                         openCard1.state = "open";
                         cards[i].state = "open";
-                        setTimeout(() => {
-                            openCard1.state = "hidden";
-                            cards[i].state = "hidden";
-                            setCards([...cards]);
-                        }, 1000)
+                        // openCard1.state = "hidden";
+                        // cards[i].state = "hidden";
+                         setTimeout(() => {
+                             // @ts-ignore
+                             openCard1.state = "hidden";
+                             cards[i].state = "hidden";
+                             setCards([...cards]);
+                             if (winGame(cards)) {
+                                 setGameState("user win")
+                             }
+                         }, 700)
                     } else {
                         openCard1.state = "open";
                         cards[i].state = "open";
+                        // openCard1.state = "closed";
+                        // cards[i].state = "closed";
                         setTimeout(() => {
+                            // @ts-ignore
                             openCard1.state = "closed";
                             cards[i].state = "closed";
                             setCards([...cards]);
-                        }, 1000)
+                        }, 700)
                     }
                 }
             }
-            console.log(cards);
-            if (winGame(cards)) {
-                setGameState("user win")
-            } else if (movesMade >= 39) {
+             if (movesMade >= 39) {
                 setGameState("user lose")
             }
         }
@@ -123,7 +128,7 @@ export const App = () => {
 
     const onButtonClick = () => {
         setGameState("running")
-        setCards( getInitialCardsState() )
+        setCards(getInitialCardsState())
         setMovesMade(0)
     }
 
@@ -162,7 +167,7 @@ export const App = () => {
                             counter={movesMade}
                         />
                         {gameState == "user win" && <WinModal onClick={onButtonClick} movesMade={movesMade}/>}
-                        {gameState == "user lose" && <LoseModal onClick={onButtonClick} />}
+                        {gameState == "user lose" && <LoseModal onClick={onButtonClick}/>}
                     </div>
                 </section>
             </main>
