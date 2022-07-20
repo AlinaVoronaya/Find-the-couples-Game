@@ -7,8 +7,16 @@
 
 
 ### Использование
+
+Установите зависимости:
+```
+npm install
+```
+
 Для сборки запустите:
 ```
 npm run build
 ```
 
+### GitHub Pages
+https://alinavoronaya.github.io/card-game/
