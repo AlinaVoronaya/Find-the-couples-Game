@@ -19,4 +19,4 @@ npm run build
 ```
 
 ### GitHub Pages
-https://alinavoronaya.github.io/card-game/
+https://alinavoronaya.github.io/Find-the-couples-Game/
